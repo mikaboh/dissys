@@ -19,6 +19,16 @@ router.post('/', (req: Request, res: Response, next: any) => {
   res.send(todoItem).status(201);
 });
 
+/* PUT: update a todo item */
+router.put('/', (req: Request, res: Response, next: any) => {
+  const todoItem: TodoItem = new TodoItem(req.body.todo, req.body.priority);
+  const todoItemToUpdate: TodoItem = todoListInstance.getTodoById(todoItem.todo);
+  todoItemToUpdate.setPriority(todoItem.priority);
+  res.send(todoItemToUpdate).status(200);
+});
+
+
+
 /* DELETE: delete a todo item. */
 router.delete('/', (req: Request, res: Response, next: any) => {
   const todoItem: TodoItem = new TodoItem(req.body.todo, req.body.priority);
@@ -49,6 +59,17 @@ router.delete('/:name', (req: Request, res: Response, next: any) => {
   if (todoItem) {
     todoListInstance.removeTodo(todoItem);
     res.send(todoItem).status(204);
+  } else {
+    res.sendStatus(404);
+  }
+});
+
+/* PUT: update a todo item by itemId */
+router.put('/:name', (req: Request, res: Response, next: any) => {
+  const todoItem: TodoItem = todoListInstance.getTodoById(req.params.name);
+  if (todoItem) {
+    todoItem.setPriority(req.body.priority);
+    res.send(todoItem).status(200);
   } else {
     res.sendStatus(404);
   }
