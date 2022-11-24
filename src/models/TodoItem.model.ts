@@ -23,3 +23,5 @@ class TodoItem {
         return "TodoItem [todo=" + this.todo + ", priority=" + this.priority + "]";
     }
 }
+
+export default TodoItem;
