@@ -7,6 +7,12 @@
 import app from '../app';
 import debug from "debug";
 import http from "http";
+import dotenv from "dotenv";
+
+/**
+ * Initialize environment variables
+ */
+dotenv.config();
 
 /**
  * Get port from environment and store in Express.
