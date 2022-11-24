@@ -2,8 +2,14 @@
   "name": "dissys",
   "version": "0.0.0",
   "private": true,
+  "main": "dist/bin/www",
   "scripts": {
-    "start": "node ./bin/www"
+    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+    "build": "tsc && npm run copy-files",
+    "copy-files": "cp ./src/public/ ./dist/ -r",
+    "prestart": "npm run build",
+    "start": "node ./dist/bin/www",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -12,6 +18,12 @@
     "morgan": "~1.9.1"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.3",
+    "@types/debug": "^4.1.7",
+    "@types/express": "^4.17.14",
+    "@types/morgan": "^1.9.3",
+    "@types/node": "^18.11.9",
+    "tslint": "^6.1.3",
     "typescript": "^4.9.3"
   }
 }
