@@ -20,11 +20,11 @@ class TodoList {
     }
 
     removeTodo(todo: TodoItem) {
-        this._todos = this._todos.filter((t) => t !== todo);
+        this._todos = this._todos.filter((t) => !t.equals(todo));
     }
 
-    getTodoByName(todoName: string) {
-        return this._todos.find((t) => t.todo === todoName);
+    getTodoById(todoId: string) {
+        return this._todos.find((t) => t.todo === todoId);
     }
 }
 

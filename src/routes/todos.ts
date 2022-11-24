@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 const router = express.Router();
 import TodoItem from "../models/TodoItem.model";
 import TodoList from "../models/TodoList.model";
@@ -6,16 +6,52 @@ import TodoList from "../models/TodoList.model";
 const todoListInstance: TodoList = new TodoList();
 todoListInstance.addTodo(new TodoItem("Buy milk", 1));
 
-/* GET todos listing. */
-router.get('/', (req: any, res: any, next: any) => {
+/* GET: get an array of all todo items */
+router.get('/', (req: Request, res: Response, next: any) => {
   const todos: TodoItem[] = todoListInstance.todos;
   res.send(todos);
 });
 
-/* POST todos listing. */
-router.post('/', (req: any, res: any, next: any) => {
-  console.log(req);
-  res.send("asd");
+/* POST: create a todo item */
+router.post('/', (req: Request, res: Response, next: any) => {
+  const todoItem: TodoItem = new TodoItem(req.body.todo, req.body.priority);
+  todoListInstance.addTodo(todoItem);
+  res.send(todoItem).status(201);
+});
+
+/* DELETE: delete a todo item. */
+router.delete('/', (req: Request, res: Response, next: any) => {
+  const todoItem: TodoItem = new TodoItem(req.body.todo, req.body.priority);
+  todoListInstance.removeTodo(todoItem);
+  res.send(todoItem).status(204);
+});
+
+/* POST: create a todo item with 2 as default priority */
+router.post('/:name', (req: Request, res: Response, next: any) => {
+  const todoItem: TodoItem = new TodoItem(req.params.name);
+  todoListInstance.addTodo(todoItem);
+  res.sendStatus(201);
+});
+
+/* GET: get a todo item by itemId */
+router.get('/:name', (req: Request, res: Response, next: any) => {
+  const todoItem: TodoItem = todoListInstance.getTodoById(req.params.name);
+  if (todoItem) {
+    res.send(todoItem).status(200);
+  } else {
+    res.sendStatus(404);
+  }
+});
+
+/* DELETE: delete a todo item by itemId */
+router.delete('/:name', (req: Request, res: Response, next: any) => {
+  const todoItem: TodoItem = todoListInstance.getTodoById(req.params.name);
+  if (todoItem) {
+    todoListInstance.removeTodo(todoItem);
+    res.send(todoItem).status(204);
+  } else {
+    res.sendStatus(404);
+  }
 });
 
 export default router;

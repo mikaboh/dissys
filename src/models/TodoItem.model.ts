@@ -1,8 +1,8 @@
 class TodoItem {
     todo: string;
-    priority: number = 2;
+    priority: number;
 
-    constructor(todo: string, priority: number) {
+    constructor(todo: string, priority: number = 2) {
         this.todo = todo;
         this.priority = priority;
     }
@@ -21,6 +21,10 @@ class TodoItem {
 
     toString() {
         return "TodoItem [todo=" + this.todo + ", priority=" + this.priority + "]";
+    }
+
+    equals(other: TodoItem) {
+        return this.todo === other.todo && this.priority === other.priority;
     }
 }
 
