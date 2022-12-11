@@ -1,8 +1,8 @@
 class TodoItem {
-    todo: string;
-    priority: number;
+    todo;
+    priority;
 
-    constructor(todo: string, priority: number = 2) {
+    constructor(todo, priority = 2) {
         this.todo = todo;
         this.priority = priority;
     }
@@ -15,7 +15,7 @@ class TodoItem {
         return this.priority;
     }
 
-    setPriority(priority: number) {
+    setPriority(priority) {
         this.priority = priority;
     }
 
@@ -23,9 +23,9 @@ class TodoItem {
         return "TodoItem [todo=" + this.todo + ", priority=" + this.priority + "]";
     }
 
-    equals(other: TodoItem) {
+    equals(other) {
         return this.todo === other.todo && this.priority === other.priority;
     }
 }
 
-export default TodoItem;
+module.exports = TodoItem;

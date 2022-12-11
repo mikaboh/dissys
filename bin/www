@@ -4,10 +4,10 @@
  * Module dependencies.
  */
 
-import app from '../app';
-import debug from "debug";
-import http from "http";
-import dotenv from "dotenv";
+var app = require('../app');
+var debug = require('debug')('dissys:server');
+var http = require('http');
+var dotenv = require('dotenv');
 
 /**
  * Initialize environment variables
@@ -18,14 +18,14 @@ dotenv.config();
  * Get port from environment and store in Express.
  */
 
-const port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-const server = http.createServer(app);
+var server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -39,17 +39,17 @@ server.on('listening', onListening);
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val: any) {
-  const normalizedPort = parseInt(val, 10);
+function normalizePort(val) {
+  var port = parseInt(val, 10);
 
-  if (isNaN(normalizedPort)) {
+  if (isNaN(port)) {
     // named pipe
     return val;
   }
 
-  if (normalizedPort >= 0) {
+  if (port >= 0) {
     // port number
-    return normalizedPort;
+    return port;
   }
 
   return false;
@@ -59,24 +59,22 @@ function normalizePort(val: any) {
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error: any) {
+function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
   }
 
-  const bind = typeof port === 'string'
+  var bind = typeof port === 'string'
     ? 'Pipe ' + port
     : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      // tslint:disable-next-line:no-console
       console.error(bind + ' requires elevated privileges');
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      // tslint:disable-next-line:no-console
       console.error(bind + ' is already in use');
       process.exit(1);
       break;
@@ -90,8 +88,8 @@ function onError(error: any) {
  */
 
 function onListening() {
-  const addr = server.address();
-  const bind = typeof addr === 'string'
+  var addr = server.address();
+  var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);

@@ -1,7 +1,7 @@
-import TodoItem from "./TodoItem.model";
+var TodoItem = require('./TodoItem.model');
 
 class TodoList {
-    _todos: TodoItem[];
+    _todos = [];
 
     constructor() {
         this._todos = [];
@@ -11,21 +11,21 @@ class TodoList {
         return this._todos;
     }
 
-    set todos(todos: TodoItem[]) {
+    set todos(todos) {
         this._todos = todos;
     }
 
-    addTodo(todo: TodoItem) {
+    addTodo(todo) {
         this._todos.push(todo);
     }
 
-    removeTodo(todo: TodoItem) {
+    removeTodo(todo) {
         this._todos = this._todos.filter((t) => !t.equals(todo));
     }
 
-    getTodoById(todoId: string) {
+    getTodoById(todoId) {
         return this._todos.find((t) => t.todo === todoId);
     }
 }
 
-export default TodoList;
+module.exports = TodoList;
