@@ -13,7 +13,7 @@ services:
     container_name: mikaboh-backend
     ports:
       - "8080:8080"
-    image: "mikaboh/dissys-backend:v3"
+    image: "mikaboh/dissys-backend:v4"
     environment:
       - SERVER_PORT=8080
       - DB_HOST=mikaboh-postgresdb
