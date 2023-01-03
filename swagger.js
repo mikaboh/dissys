@@ -4,7 +4,7 @@ const doc = {
     info: {
         title: 'Distributed Systems - API',
     },
-    host: 'localhost:3000',
+    host: process.env.SERVER_PORT,
     schemes: ['http'],
 };
 
