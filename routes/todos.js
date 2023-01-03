@@ -1,78 +1,94 @@
 var express = require('express');
-var TodoItem = require('../models/TodoItem.model');
-var TodoList = require('../models/TodoList.model');
 const router = express.Router();
+var models = require('../models/index').models;
 
-const todoListInstance = new TodoList();
-todoListInstance.addTodo(new TodoItem("Buy milk", 1));
-
-/* GET: get an array of all todo items */
-router.get('/', (req, res, next) => {
-  const todos = todoListInstance.todos;
-  res.send(todos);
-});
-
-/* POST: create a todo item */
-router.post('/', (req, res, next) => {
-  const todoItem = new TodoItem(req.body.todo, req.body.priority);
-  todoListInstance.addTodo(todoItem);
-  res.send(todoItem).status(201);
-});
-
-/* PUT: update a todo item */
-router.put('/', (req, res, next) => {
-  const todoItem = new TodoItem(req.body.todo, req.body.priority);
-  const todoItemToUpdate = todoListInstance.getTodoById(todoItem.todo);
-  todoItemToUpdate.setPriority(todoItem.priority);
-  res.send(todoItemToUpdate).status(200);
-});
-
-
-
-/* DELETE: delete a todo item. */
-router.delete('/', (req, res, next) => {
-  const todoItem = new TodoItem(req.body.todo, req.body.priority);
-  todoListInstance.removeTodo(todoItem);
-  res.send(todoItem).status(204);
-});
-
-/* POST: create a todo item with 2 as default priority */
+/* POST: create a new todoItem. */
 router.post('/:name', (req, res, next) => {
-  const todoItem = new TodoItem(req.params.name);
-  todoListInstance.addTodo(todoItem);
-  res.sendStatus(201);
+  models.TodoItem.create({ todo: req.params.name, priority: 2 }).then(todoItem => {
+    res.status(201).send({
+      "todo": todoItem.todo,
+      "priority": todoItem.priority,
+    });
+  });
 });
 
-/* GET: get a todo item by itemId */
-router.get('/:name', (req, res, next) => {
-  const todoItem = todoListInstance.getTodoById(req.params.name);
-  if (todoItem) {
-    res.send(todoItem).status(200);
-  } else {
-    res.sendStatus(404);
-  }
+/* GET: get all todoItems. */
+router.get('/', (req, res, next) => {
+  models.TodoItem.findAll().then(todoItems => {
+    todoItems = todoItems.map(todoItem => {
+      return {
+        "todo": todoItem.todo,
+        "priority": todoItem.priority,
+      }
+    });
+    res.send(todoItems).status(200);
+  });
 });
 
-/* DELETE: delete a todo item by itemId */
-router.delete('/:name', (req, res, next) => {
-  const todoItem = todoListInstance.getTodoById(req.params.name);
-  if (todoItem) {
-    todoListInstance.removeTodo(todoItem);
-    res.send(todoItem).status(204);
-  } else {
-    res.sendStatus(404);
-  }
+/* POST: create a new todoItem. */
+router.post('/', (req, res, next) => {
+  models.TodoItem.create({ todo: req.body.todo, priority: req.body.priority }).then(todoItem => {
+    res.status(201).send({
+      "todo": todoItem.todo,
+      "priority": todoItem.priority,
+    });
+  }).catch(error => {
+    res.status(400).send({
+      "error": error.message,
+    });
+  });
 });
 
-/* PUT: update a todo item by itemId */
-router.put('/:name', (req, res, next) => {
-  const todoItem = todoListInstance.getTodoById(req.params.name);
-  if (todoItem) {
-    todoItem.setPriority(req.body.priority);
-    res.send(todoItem).status(200);
-  } else {
-    res.sendStatus(404);
-  }
+/* DELETE: delete a specific todoItem. */
+router.delete('/', (req, res, next) => {
+  models.TodoItem.destroy({
+    where: {
+      todo: req.body.todo,
+      priority: req.body.priority,
+    }
+  }).then(() => {
+    res.sendStatus(204);
+  }).catch(error => {
+    res.status(400).send({
+      "error": error.message,
+    });
+  });
+});
+
+/* DELETE: delete a specific todoItem with url parameter :id */
+router.delete('/:id', (req, res, next) => {
+  models.TodoItem.destroy({
+    where: {
+      todo: req.params.id,
+    }
+  }).then(() => {
+    res.sendStatus(204);
+  }).catch(error => {
+    res.status(400).send({
+      "error": error.message,
+    });
+  });
+});
+
+/* GET: get a specific todoItem */
+router.get('/id/:id', (req, res, next) => {
+  models.TodoItem.findOne({
+    where: {
+      todo: req.params.id,
+    }
+  }).then(todoItem => {
+    res.send({
+      "todo": todoItem.todo,
+      "priority": todoItem.priority,
+    }).status(200);
+  });
+});
+
+/* GET: get a count of todoItems. */
+router.get('/count', (req, res, next) => {
+  models.TodoItem.count().then(count => {
+    res.send(count.toString()).status(200);
+  });
 });
 
 module.exports = router;

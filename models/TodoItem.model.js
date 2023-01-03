@@ -1,31 +1,25 @@
-class TodoItem {
-    todo;
-    priority;
+const getTodoModel = (sequelize, { DataTypes }) => {
+    const TodoItem = sequelize.define('TodoItem', {
+        todo: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notEmpty: true,
+            },
+        },
+        priority: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate: {
+                notEmpty: true,
+                min: 1,
+            },
+        },
+    },
+        {
+        });
 
-    constructor(todo, priority = 2) {
-        this.todo = todo;
-        this.priority = priority;
-    }
+    return TodoItem;
+};
 
-    getTodo() {
-        return this.todo;
-    }
-
-    getPriority() {
-        return this.priority;
-    }
-
-    setPriority(priority) {
-        this.priority = priority;
-    }
-
-    toString() {
-        return "TodoItem [todo=" + this.todo + ", priority=" + this.priority + "]";
-    }
-
-    equals(other) {
-        return this.todo === other.todo && this.priority === other.priority;
-    }
-}
-
-module.exports = TodoItem;
+module.exports = getTodoModel;

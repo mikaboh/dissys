@@ -7,21 +7,20 @@ services:
     ports:
       - "8090:8090"
     environment:
-      - SERVER_PORT=8090
       - BACKEND_ENDPOINT=http://backend:8080/todos/
     image: "maeddes/hsefrontend:v231"
   backend:
     container_name: mikaboh-backend
     ports:
       - "8080:8080"
+    image: "mikaboh/dissys-backend:v3"
     environment:
       - SERVER_PORT=8080
-      - POSTGRES_HOST=localhost
-      - POSTGRES_PORT=5432
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB_NAME=postgres
-    image: "mikaboh/dissys-backend:v1"
+      - DB_HOST=mikaboh-postgresdb
+      - DB_PORT=5432
+      - DB_NAME=hsedb
+      - DB_USER=someUser
+      - DB_PASSWORD=somePassword
     networks:
       - hsenet
     depends_on:
@@ -31,8 +30,8 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=matthias
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=someUser
+      - POSTGRES_PASSWORD=somePassword
       - POSTGRES_DB=hsedb
       - PGDATA=/var/lib/postgresql/data/pgdata
     image: "postgres"
